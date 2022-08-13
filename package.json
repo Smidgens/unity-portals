@@ -1,0 +1,21 @@
+{
+	"name":"com.smidgenomics.unity-portals",
+	"version":"0.1.0",
+	"displayName":"Portals",
+	"description":"Portal mechanics for Unity",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Smidgens/unity-portals.git"
+	},
+	"author":{
+		"name":"Unnar Krist",
+		"url":"https://github.com/Smidgens"
+	},
+	"keywords":[
+		"portals",
+		"unity-portals",
+		"smidgenomics",
+		"mechanic",
+		"cake"
+	]
+}

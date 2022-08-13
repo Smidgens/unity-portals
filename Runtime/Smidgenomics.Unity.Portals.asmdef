@@ -1,0 +1,14 @@
+{
+    "name": "Smidgenomics.Unity.Portals",
+    "rootNamespace": "Smidgenomics.Unity.Portals",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
