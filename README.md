@@ -1,12 +1,28 @@
 ![](/.github/banner.png?raw=true "")
-![](/.github/gallery.png?raw=true "")
-
+![](/.github/preview.png?raw=true "")
 
 
 ## ℹ️ Features
 
-todo
+* Basic portal rendering for Unity.
+* Minimal setup required.
+* Configurable portal shape.
+* Basic teleportation support for objects (player controller etc.).
+* 🤞 Reasonably lightweight.
 
+**⌛ Planned**
+
+* [ ] Basic Valve-esque physics (portal velocity, object funneling etc.).
+* [ ] More extensibility and options.
+
+**🐞 Known Issues / Limitations**
+
+* Screen space shadows rendered through portals may flicker at short distances.
+
+
+**Note**
+
+This plugin does not contain any demo assets. Effects such as outlines around portals must be added manually and configured in each case.
 
 <br/>
 
@@ -18,13 +34,15 @@ todo
 
 <br/>
 
-## 🚀 Use
+# 🚀 Use
 
-todo
+*Documentation page coming soon*
 
 <br/>
 
+
+
 ## 📜 Credits
 
-todo
+* Camera logic largely adapts methods described [here](https://www.youtube.com/watch?v=cWpFZbjtSQg) by Sebastian Lague.
 
