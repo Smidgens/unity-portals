@@ -10,20 +10,16 @@ namespace Smidgenomics.Unity.Portals
 	[DisallowMultipleComponent]
 	internal class PortalRendering : MonoBehaviour
 	{
-		[SerializeField] private Mesh _renderMesh = default;
-
 		public const string SHADER_NAME = Config.Shader.Name.PORTAL;
 		public const string SHADER_TEX_PROP = "_Tex";
-		public const int TEXTURE_SIZE = 1024;
 
-#if UNITY_EDITOR
-		// editor helper
-		internal static class _FN
-		{
-			public const string
-			MESH = nameof(_renderMesh);
-		}
-#endif
+		public const int
+		DEF_RESOLUTION = 2048,
+		MIN_RESOLUTION = 64,
+		MAX_RESOLUTION = 8192;
+
+		[SerializeField] private Mesh _renderMesh = default;
+		[SerializeField, Min(MIN_RESOLUTION)] private int _resolution = DEF_RESOLUTION;
 
 		// re-used material
 		private static Material _closeMaterial = default;
@@ -49,7 +45,9 @@ namespace Smidgenomics.Unity.Portals
 			_projection = GetComponent<PortalProjection>();
 
 			// init texture
-			_texture = CreateTexture(TEXTURE_SIZE);
+			int tres = _resolution;
+			ClampMinMax(ref tres, MIN_RESOLUTION, MAX_RESOLUTION);
+			_texture = CreateTexture(tres);
 			_pb.SetTexture(SHADER_TEX_PROP, _texture);
 			_projection.PortalCamera.targetTexture = _texture;
 
@@ -67,6 +65,11 @@ namespace Smidgenomics.Unity.Portals
 			DrawPortal();
 		}
 
+		private static void ClampMinMax(ref int v, in int min, in int max)
+		{
+			if(v < MIN_RESOLUTION) { v = min; }
+			else if(v > MAX_RESOLUTION) { v = max; }
+		}
 
 		private bool IsVisible()
 		{
@@ -122,27 +125,11 @@ namespace Smidgenomics.Unity.Portals
 
 		private static RenderTexture CreateTexture(in int size)
 		{
-			return new RenderTexture(size, size, 0);
+			var t = new RenderTexture(size, size, 0);
+
+			t.format = RenderTextureFormat.RGB111110Float;
+
+			return t;
 		}
 	}
-}
-
-
-namespace Smidgenomics.Unity.Portals.Editor
-{
-	using UnityEditor;
-
-	internal class PortalRenderer_Editor : Editor
-	{
-		public override void OnInspectorGUI()
-		{
-			base.OnInspectorGUI();
-		}
-
-		private void OnEnable()
-		{
-			
-		}
-	}
-
 }

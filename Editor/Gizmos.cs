@@ -12,7 +12,7 @@ namespace Smidgenomics.Unity.Portals.Editor
 		private static class Colors
 		{
 			public static readonly Color
-			PORTAL = Color.blue * 0.3f;
+			PORTAL = Color.blue * 0.8f;
 		}
 
 		[DrawGizmo((GizmoType)~0, typeof(Portal))]

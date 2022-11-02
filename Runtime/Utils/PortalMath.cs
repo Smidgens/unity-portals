@@ -8,7 +8,6 @@ namespace Smidgenomics.Unity.Portals
 
 	internal static class PortalMath
 	{
-	
 		public static class Matrix
 		{
 			public static readonly Matrix4x4
@@ -17,7 +16,6 @@ namespace Smidgenomics.Unity.Portals
 
 		public static class Linear
 		{
-
 			public static bool CrossedPlane(in Vector3 origin, in Vector3 normal, in Vector3 position, in Vector3 prevPosition)
 			{
 				var sideNew = SMath.Sign(Vector3.Dot(normal, position - origin));
@@ -34,13 +32,38 @@ namespace Smidgenomics.Unity.Portals
 
 			public static bool InsideOval(in Vector2 extents, in Vector2 localPos)
 			{
-				return
-				Mathf.Abs(localPos.x) <= extents.x
-				&& Mathf.Abs(localPos.y) <= extents.y;
+				if (NonZeroXY(extents)) { return false; }
+				float sx = 1f, sy = 1f;
+				float r = Mathf.Max(extents.x, extents.y);
+				if (extents.y < extents.x)
+				{
+					sy = extents.x / extents.y;
+				}
+				else if(extents.x < extents.y)
+				{
+					sx = extents.y / extents.x;
+				}
+				var x = localPos.x * sx;
+				var y = localPos.y * sy;
+				return InsideCircle(r, x, y);
+			}
+
+			public static bool InsideCircle(in float radius, in float x, in float y)
+			{
+				return x.PO2() + y.PO2() < radius.PO2();
+			}
+
+			public static bool InsideCircle(in float radius, in Vector2 pos)
+			{
+				return InsideCircle(radius, pos.x, pos.y);
+			}
+
+			private static bool NonZeroXY(in Vector2 v)
+			{
+				return v.x > 0f && v.y > 0f;
 			}
 
 		}
-
 
 		public static class Teleport
 		{
@@ -48,9 +71,11 @@ namespace Smidgenomics.Unity.Portals
 			(
 				Transform t,
 				Transform a,
-				Transform b
+				Transform b,
+				in TeleportSettings settings
 			)
 			{
+				// TODO: factor in settings
 				var aflip = Matrix.ROTATION_180 * a.worldToLocalMatrix;
 				var a2b = b.localToWorldMatrix * aflip;
 				var position = a2b.MultiplyPoint(t.position);

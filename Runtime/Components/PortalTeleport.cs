@@ -1,5 +1,7 @@
 // smidgens @ github
 
+#pragma warning disable 0414
+
 namespace Smidgenomics.Unity.Portals
 {
 	using UnityEngine;
@@ -9,6 +11,9 @@ namespace Smidgenomics.Unity.Portals
 	[RequireComponent(typeof(Portal))]
 	internal partial class PortalTeleport : MonoBehaviour
 	{
+		[Expand(true)]
+		[SerializeField] private TeleportSettings _settings = TeleportSettings.DEFAULTS;
+
 		private Portal _portal = default;
 
 		private void Awake()
@@ -25,13 +30,11 @@ namespace Smidgenomics.Unity.Portals
 			minDistance += 1f;
 
 			// loop through travelers in scene
-			for(var i = 0; i < PortalPayload.Count; i++)
+			for(var i = 0; i < PortalTraveller.Count; i++)
 			{
 				// 
-				var t = PortalPayload.GetAt(i);
-
+				var t = PortalTraveller.GetAt(i);
 				if(!t) { continue; }
-
 				// close enough to bother checking?
 				if(t.DistanceTo(this) > minDistance) { continue; }
 
@@ -42,20 +45,22 @@ namespace Smidgenomics.Unity.Portals
 			}
 		}
 
-		/// <summary>
-		/// teleport target to exit
-		/// </summary>
-		private void Teleport(PortalPayload target, Portal from)
+		// teleport to exit
+		private void Teleport(PortalTraveller target, Portal from)
 		{
-			var (pos,rot) = PortalMath.Teleport.GetExitOrientation(target.transform, from.transform, from.Link.transform);
+			var (pos,rot) = PortalMath.Teleport.GetExitOrientation
+			(
+				target.transform,
+				from.transform,
+				from.Link.transform,
+				_settings
+			);
 			target.transform.position = pos;
 			target.transform.rotation = rot;
 		}
 
-		/// <summary>
-		/// Target just entered portal
-		/// </summary>
-		private static bool HasEnteredPortal(PortalPayload target, Portal portal)
+		// did target just enter portal
+		private static bool HasEnteredPortal(PortalTraveller target, Portal portal)
 		{
 			return CheckBoundsCrossed
 			(
@@ -89,9 +94,9 @@ namespace Smidgenomics.Unity.Portals
 
 			switch(portal.Bounds.shape)
 			{
-				case Portal.PortalShape.Rect:
+				case PortalShape.Rect:
 					return PortalMath.Linear.InsideRect(portal.Bounds.extents, localPos);
-				case Portal.PortalShape.Oval:
+				case PortalShape.Oval:
 					return PortalMath.Linear.InsideOval(portal.Bounds.extents, localPos);
 			}
 			return false;

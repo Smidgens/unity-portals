@@ -6,29 +6,20 @@ namespace Smidgenomics.Unity.Portals
 	using UnityEngine.Events;
 	using System.Collections.Generic;
 
-	[AddComponentMenu(Config.AddComponentMenu.PAYLOAD)]
-	public class PortalPayload : MonoBehaviour
+	[AddComponentMenu(Config.AddComponentMenu.TRAVELLER)]
+	public class PortalTraveller : MonoBehaviour
 	{
 		public static int Count => _instances.Count;
-		public static PortalPayload GetAt(int i)
+		public static PortalTraveller GetAt(int i)
 		{
 			return i >= 0 && i < _instances.Count ? _instances[i] : null;
 		}
 
 		public Vector3 PreviousPosition { get; private set; }
 
-#if UNITY_EDITOR
-		// editor helper
-		internal static class _FN
-		{
-			public const string
-			ONUPDATE = nameof(_onUpdate);
-		}
-#endif
-
 		[SerializeField] private UnityEvent _onUpdate = default;
 
-		private static List<PortalPayload> _instances = new List<PortalPayload>();
+		private static List<PortalTraveller> _instances = new List<PortalTraveller>();
 
 		protected virtual void OnUpdate() { }
 
@@ -41,12 +32,24 @@ namespace Smidgenomics.Unity.Portals
 
 		private void OnEnable()
 		{
-			_instances.Add(this);
+			Add(this);
 		}
 
 		private void OnDisable()
 		{
-			_instances.Remove(this);
+			Remove(this);
+		}
+
+		private static void Add(PortalTraveller t)
+		{
+
+
+			_instances.Add(t);
+		}
+
+		private static void Remove(PortalTraveller t)
+		{
+			_instances.Remove(t);
 		}
 	}
 }

@@ -15,14 +15,9 @@ namespace Smidgenomics.Unity.Portals
 		public Camera MainCamera => _mainCamera;
 		public Camera PortalCamera => _camGetter.Invoke(this);
 
-		internal static class _FN
-		{
-			public const string
-			MAIN_CAM = nameof(_mainCamera);
-		}
-
-
 		[SerializeField] private Camera _mainCamera;
+		[SerializeField] private Camera _cameraPreset = default;
+
 		private Camera _portalCamera = default;
 		private Portal _portal = default;
 
@@ -59,22 +54,37 @@ namespace Smidgenomics.Unity.Portals
 		}
 
 		// lazy init voodoo
-		private static Camera GetCameraInit(PortalProjection pj)
+		private static Camera GetCameraInit(PortalProjection pp)
 		{
-			pj._portalCamera = CreateCamera(pj.transform);
-			pj._camGetter = pj.GetCamera;
-			return pj._portalCamera;
+			pp._portalCamera = CreateCamera(pp.transform, pp._cameraPreset);
+			pp._camGetter = pp.GetCamera;
+			return pp._portalCamera;
 		}
 
-		private static Camera CreateCamera(Transform owner)
+		private static Camera CreateCamera(Transform owner, Camera preset)
 		{
-			var cam = new GameObject(SPAWN_NAME).AddComponent<Camera>();
-			cam.transform.parent = owner;
-			cam.transform.localPosition = Vector3.zero;
-			cam.nearClipPlane = 0.01f;
+			Camera cam = NewOrPreset(preset, SetCameraDefaults);
+			cam.gameObject.name = SPAWN_NAME;
+			cam.transform.ParentAndReset(owner);
 			cam.enabled = false;
 			return cam;
 		}
 
+		private static void SetCameraDefaults(Camera cam)
+		{
+			cam.nearClipPlane = 0.01f;
+		}
+
+		private static T NewOrPreset<T>(T preset, Action<T> initFn) where T : Component
+		{
+			T instance;
+			if (preset != null) { instance = Instantiate(preset); }
+			else
+			{
+				instance = new GameObject().AddComponent<T>();
+				initFn.Invoke(instance);
+			}
+			return instance;
+		}
 	}
 }

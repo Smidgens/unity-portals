@@ -1,4 +1,6 @@
-﻿namespace Smidgenomics.Unity.Portals
+﻿// smidgens @ github
+
+namespace Smidgenomics.Unity.Portals
 {
 	using UnityEngine;
 
@@ -32,7 +34,6 @@
 				+ ROOT_NAMESPACE + "/"
 				+ NAMESPACE + "/";
 			}
-
 		}
 
 		public static class AddComponentMenu
@@ -41,7 +42,7 @@
 			public const string PROJECTION = _PREFIX + "Portal Projection";
 			public const string RENDERING = _PREFIX + "Portal Rendering";
 			public const string TELEPORT = _PREFIX + "Portal Teleport";
-			public const string PAYLOAD = _PREFIX + "Portal Payload";
+			public const string TRAVELLER = _PREFIX + "Portal Traveller";
 			private const string _PREFIX = ROOT_NAMESPACE + "/Portals/";
 		}
 
