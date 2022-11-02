@@ -42,7 +42,7 @@ This plugin does not contain any demo assets. Effects such as outlines around po
 
 
 
-## 📜 Credits
+## 📜 Acknowledgements
 
 * Camera logic largely adapts methods described [here](https://www.youtube.com/watch?v=cWpFZbjtSQg) by Sebastian Lague.
 
